@@ -1,5 +1,7 @@
 package com.taskmanager.taskmanager.service;
 
+import com.taskmanager.taskmanager.dto.TaskDto;
+import com.taskmanager.taskmanager.exception.RecordNotFoundException;
 import com.taskmanager.taskmanager.model.TaskModel;
 import com.taskmanager.taskmanager.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +25,20 @@ public class TaskService {
     }
 
     public void update(Long id, TaskModel taskModel){
-        Optional<TaskModel> task = taskRepository.findById(id);
-
-        if (!task.isEmpty()){
+        if (!taskRepository.findById(id).isEmpty()){
             taskModel.setId(id);
             taskRepository.save(taskModel);
+        } else {
+            throw new RecordNotFoundException(id);
         }
     }
 
     public void delete(Long id){
-        taskRepository.deleteById(id);
+        taskRepository.delete(taskRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id)));
+    }
+
+    public TaskModel findById(Long id) {
+        return taskRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
     }
 }

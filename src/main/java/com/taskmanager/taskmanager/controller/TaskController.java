@@ -5,6 +5,8 @@ import com.taskmanager.taskmanager.model.TaskModel;
 import com.taskmanager.taskmanager.service.TaskService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,12 +23,20 @@ public class TaskController {
     private ModelMapper mapper;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     void create(@RequestBody TaskDto taskDto){
         taskService.create(mapper.map(taskDto, TaskModel.class));
     }
 
     @GetMapping
-    List<TaskModel> findAll(){return taskService.findAll();}
+    ResponseEntity<List<TaskModel>> findAll(){
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    TaskDto findById(@PathVariable(value = "id") Long id){
+        return mapper.map(taskService.findById(id), TaskDto.class);
+    }
 
     @PutMapping("/{id}")
     void update(@PathVariable(value = "id") Long id, @RequestBody TaskDto taskDto){taskService.update(id, mapper.map(taskDto, TaskModel.class));}
