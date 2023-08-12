@@ -6,7 +6,6 @@ import com.taskmanager.taskmanager.service.TaskService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,18 +28,24 @@ public class TaskController {
     }
 
     @GetMapping
-    ResponseEntity<List<TaskModel>> findAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(taskService.findAll());
+    @ResponseStatus(HttpStatus.OK)
+    List<TaskModel> findAll(){
+        return taskService.findAll();
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     TaskDto findById(@PathVariable(value = "id") Long id){
         return mapper.map(taskService.findById(id), TaskDto.class);
     }
 
     @PutMapping("/{id}")
-    void update(@PathVariable(value = "id") Long id, @RequestBody TaskDto taskDto){taskService.update(id, mapper.map(taskDto, TaskModel.class));}
+    @ResponseStatus(HttpStatus.OK)
+    void update(@PathVariable(value = "id") Long id, @RequestBody TaskDto taskDto){
+        taskService.update(id, mapper.map(taskDto, TaskModel.class));
+    }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void delete(@PathVariable(value = "id") Long id){taskService.delete(id);}
 }
