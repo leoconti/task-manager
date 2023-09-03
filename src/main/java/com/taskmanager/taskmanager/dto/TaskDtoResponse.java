@@ -1,7 +1,5 @@
 package com.taskmanager.taskmanager.dto;
 
-import jakarta.validation.constraints.NotBlank;
-
 public class TaskDtoResponse {
 
     private Long id;
