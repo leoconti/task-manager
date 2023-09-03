@@ -1,6 +1,5 @@
 package com.taskmanager.taskmanager.service;
 
-import com.taskmanager.taskmanager.dto.TaskDto;
 import com.taskmanager.taskmanager.exception.RecordNotFoundException;
 import com.taskmanager.taskmanager.model.TaskModel;
 import com.taskmanager.taskmanager.repository.TaskRepository;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -16,8 +14,8 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public void create(TaskModel taskModel){
-        taskRepository.save(taskModel);
+    public TaskModel create(TaskModel taskModel){
+        return taskRepository.save(taskModel);
     }
 
     public List<TaskModel> findAll(){
